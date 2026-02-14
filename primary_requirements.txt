@@ -1,0 +1,6 @@
+# --- Blind 2026 Upgrade (The Attack) ---
+torch
+torchvision
+numpy
+scipy
+Pillow

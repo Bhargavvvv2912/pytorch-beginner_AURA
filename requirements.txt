@@ -1,0 +1,6 @@
+# --- PyTorch 1.0 Stability Window (Manually Reconstructed) ---
+torch==1.0.1
+torchvision==0.2.2
+numpy==1.19.5
+scipy==1.2.1
+Pillow==8.0.0
