@@ -24,14 +24,14 @@ class GeminiClientWrapper:
         return response
 
 AGENT_CONFIG = {
-    "PROJECT_NAME": "DQN",
+    "PROJECT_NAME": "Autoencoder Dependency Check",
     "IS_INSTALLABLE_PACKAGE": False, 
     "REQUIREMENTS_FILE": "requirements.txt",
     "METRICS_OUTPUT_FILE": "metrics_output.txt",
     "PRIMARY_REQUIREMENTS_FILE": "primary_requirements.txt",
     "VALIDATION_CONFIG": {
         "type": "script",
-        "smoke_test_script": "validation_dqn.py",
+        "smoke_test_script": "validation_vae.py",
         "project_dir": "." 
     },
     "MAX_RUN_PASSES": 3,
