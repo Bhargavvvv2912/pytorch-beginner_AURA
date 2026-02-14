@@ -1,6 +1,7 @@
-# --- Adjusted PyTorch Legacy Baseline (Python 3.9 compatible) ---
+# --- PyTorch Legacy Baseline (Binary Stability Window) ---
 torch==1.7.1
 torchvision==0.8.2
 numpy==1.19.5
-scipy==1.2.1
+# Oldest SciPy with a native Python 3.9 binary wheel
+scipy==1.5.4
 Pillow==8.0.0

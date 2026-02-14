@@ -6,33 +6,33 @@ from torch import nn
 def validate_vae():
     print("--- 🧬 VAE Legacy Syntax Check ---")
     try:
-        # 1. THE MSE LOSS TRAP
-        # Failure: TypeError because size_average was removed in modern PT
+        # 1. THE SCALAR INDEXING TRAP (Removed in PT 2.x)
+        # This works in PT 1.7.1 but crashes in PT 2.6
+        loss = torch.tensor(0.5)
         try:
-            reconstruction_function = nn.MSELoss(size_average=False)
-            print("SUCCESS: Legacy 'size_average' accepted.")
-        except TypeError as e:
-            print(f"CRITICAL: API DEPLETION! MSELoss argument changed: {e}")
+            val = loss.data[0]
+            print(f"SUCCESS: loss.data[0] indexing allowed.")
+        except IndexError:
+            print("CRITICAL: TENSOR API CHANGE! loss.data[0] failed.")
             return False
 
-        # 2. THE SIGMOID TRAP
-        # Failure: AttributeError: F.sigmoid was removed in modern PT
+        # 2. THE SIGMOID TRAP (Removed in PT 2.x)
         try:
-            dummy_z = torch.randn(1, 400)
+            dummy_z = torch.randn(1, 10)
             res = F.sigmoid(dummy_z)
             print("SUCCESS: F.sigmoid alias found.")
         except AttributeError:
             print("CRITICAL: API DEPLETION! F.sigmoid was removed.")
             return False
 
-        # 3. THE SCALAR INDEXING TRAP
-        # Failure: IndexError: loss.data[0] fails on 0-dim tensors in modern PT
-        loss = torch.tensor(0.5)
+        # 3. THE PILLOW ANTIALIAS TRAP
+        # Author code often uses Image.ANTIALIAS (Removed in Pillow 10.0)
+        from PIL import Image
         try:
-            val = loss.data[0]
-            print(f"SUCCESS: loss.data[0] indexing allowed: {val}")
-        except IndexError:
-            print("CRITICAL: TENSOR API CHANGE! loss.data[0] failed.")
+            alias = Image.ANTIALIAS
+            print("SUCCESS: Pillow legacy constants found.")
+        except AttributeError:
+            print("CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.")
             return False
 
         return True
