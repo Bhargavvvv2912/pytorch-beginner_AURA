@@ -1,0 +1,2533 @@
+
+::group::Analyzing Codebase for Update Risk
+Usage scores calculated.
+::endgroup::
+INFO: Found pinned requirements. Running initial health check and regenerating lockfile...
+
+::group::Initial Baseline Health Check
+--> Bootstrap Step 1: Installing dependencies from 'requirements.txt'...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/initial_check_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/requirements.txt' in CWD: '.'
+
+--> Bootstrap Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/initial_check_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+Smoke test PASSED.
+::endgroup::
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/initial_check_venv/bin/python -m pip freeze' in CWD: '.'
+Initial baseline is valid and stable. Overwriting requirements file with clean, frozen state.
+::endgroup::
+INFO: Dependency graph metrics not found. Entanglement scores will be 0.
+
+::group::UPDATE PASS 1/3
+
+Prioritized Update Plan for this Pass (Highest Risk First):
+Rank  | Package                        | % of Total Risk    | Change
+----- | ------------------------------ | ------------------ | --------------------
+1     | torch                          | 25.00             % | 1.7.1 -> 2.10.0
+2     | numpy                          | 25.00             % | 1.19.5 -> 2.4.2
+3     | Pillow                         | 25.00             % | 8.0.0 -> 12.1.1
+4     | scipy                          | 12.50             % | 1.5.4 -> 1.17.0
+5     | torchvision                    | 12.50             % | 0.8.2 -> 0.25.0
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 1 | ATTEMPT 1/5] Processing 'torch'
+PULSE: Changed packages this pass so far: set()
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to torch==2.10.0
+
+::group::Probe: Install & Validate for torch==2.10.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The primary root cause of the dependency conflict is that `torch` version `2.10.0` does not exist as an available distribution, further complicated by pip ignoring several other versions, such as `1.14.0` (Requires-Python >=3.10) and `1.16.0` (Requires-Python >=3.11), due to current Python environment incompatibility, leaving only versions like `1.7.1` through `2.8.0` as options.'
+    Suspected Blockers (Regex): ['torch']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'torch': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of torch==2.10.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torch==2.10.0` is not available among the found versions of `torch` (ranging from `1.7.1` to `2.8.0`), with several other package versions (e.g., `1.14.0`, `2.1.0`, `12.0.0`) being ignored due to requiring a Python version of 3.10 or 3.11 or higher.
+  -> Checking compatibility of torch==2.9.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torch==2.9.1` cannot be found, as the available distributions for `torch` only go up to `2.8.0`, with various other package versions like `1.14.0`, `2.1.0`, and `12.0.0` being ignored due to requiring a newer Python version.
+  -> Checking compatibility of torch==2.9.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torch==2.9.0` is not an available distribution, with the found versions ranging from `1.7.1` to `2.8.0`.
+  -> Checking compatibility of torch==2.8.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.8.0` and `torchvision==0.8.2` have incompatible dependencies with each other.
+  -> Checking compatibility of torch==2.7.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==2.7.1` and `torchvision==0.8.2` have conflicting underlying dependency requirements that prevent their simultaneous installation.
+  -> Checking compatibility of torch==2.7.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency resolution failure is a network `socket.timeout` occurring within the Python 3.9 environment, specifically affecting pip's internal `urllib3` vendor library during a read operation, rather than an explicit package version conflict.
+  -> Checking compatibility of torch==2.6.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by conflicting dependencies between `torch==2.6.0` and `torchvision==0.8.2`.
+  -> Checking compatibility of torch==2.5.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==2.5.1` and `torchvision==0.8.2` have incompatible underlying dependencies that prevent them from being installed simultaneously.
+  -> Checking compatibility of torch==2.5.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.5.0` and `torchvision==0.8.2` have conflicting dependencies, preventing their simultaneous installation.
+  -> Checking compatibility of torch==2.4.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==2.4.1` and `torchvision==0.8.2` have incompatible underlying dependencies.
+  -> Checking compatibility of torch==2.4.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.4.0` and `torchvision==0.8.2` have conflicting dependencies that prevent their simultaneous installation.
+  -> Checking compatibility of torch==2.3.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because installing `torch==2.3.1` and `torchvision==0.8.2` together leads to incompatible sub-dependencies.
+  -> Checking compatibility of torch==2.3.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the inability to install `torch==2.3.0` and `torchvision==0.8.2` together because their respective dependencies clash.
+  -> Checking compatibility of torch==2.2.2...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==2.2.2` and `torchvision==0.8.2` having conflicting dependencies.
+  -> Checking compatibility of torch==2.2.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==2.2.1` and `torchvision==0.8.2` have conflicting requirements for one or more of their underlying dependencies.
+  -> Checking compatibility of torch==2.2.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==2.2.0` and `torchvision==0.8.2` have incompatible underlying dependencies.
+  -> Checking compatibility of torch==2.1.2...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==2.1.2` and `torchvision==0.8.2` having conflicting internal dependencies.
+  -> Checking compatibility of torch==2.1.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by torch==2.1.1 and torchvision==0.8.2 having incompatible or conflicting dependencies with each other.
+  -> Checking compatibility of torch==2.1.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.1.0` and `torchvision==0.8.2` have conflicting requirements for their respective dependencies.
+  -> Checking compatibility of torch==2.0.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.0.1` and `torchvision==0.8.2` have conflicting dependencies, making them impossible to install together.
+  -> Checking compatibility of torch==2.0.0...
+     -- Incompatible. Diagnosis: The root cause of the error is a `socket.timeout` during a network read operation by pip, occurring within Python `3.9.25` and pip's vendored `urllib3` components, rather than a dependency conflict.
+  -> Checking compatibility of torch==1.13.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.13.1` and `torchvision==0.8.2` have incompatible underlying dependencies, preventing their simultaneous installation.
+  -> Checking compatibility of torch==1.13.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.13.0` and `torchvision==0.8.2` have conflicting dependencies and therefore cannot be installed together.
+  -> Checking compatibility of torch==1.12.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.12.1` and `torchvision==0.8.2` require conflicting versions of one or more common underlying packages.
+  -> Checking compatibility of torch==1.12.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.12.0` and `torchvision==0.8.2` have incompatible sub-dependency requirements that prevent their co-installation.
+  -> Checking compatibility of torch==1.11.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.11.0` and `torchvision==0.8.2` cannot be installed together because these specific package versions have conflicting dependencies.
+  -> Checking compatibility of torch==1.10.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.10.2` and `torchvision==0.8.2` have conflicting internal dependencies.
+  -> Checking compatibility of torch==1.10.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==1.10.1` and `torchvision==0.8.2` having incompatible dependency requirements that prevent them from being installed together.
+  -> Checking compatibility of torch==1.10.0...
+     -- Incompatible. Diagnosis: The root cause of the encountered issue, rather than a dependency conflict, is a `socket.timeout` during a network read operation, preventing package data retrieval within the Python 3.9.25 environment and thereby impeding successful dependency resolution.
+  -> Checking compatibility of torch==1.9.1...
+     -- Incompatible. Diagnosis: The provided log does not identify a dependency conflict; instead, it indicates a `socket.timeout` during package resolution by `pip` (running on Python 3.9.25), which prevented the process from completing and thus from reporting any conflicts.
+  -> Checking compatibility of torch==1.9.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==1.9.0` and `torchvision==0.8.2` having conflicting underlying dependency requirements that prevent their simultaneous installation.
+  -> Checking compatibility of torch==1.8.1...
+     -- Incompatible. Diagnosis: A dependency conflict could not be fully identified or resolved because pip's resolver, operating within Python 3.9.25, encountered a `socket.timeout` while attempting to fetch necessary package metadata.
+  -> Checking compatibility of torch==1.8.0...
+     -- Incompatible. Diagnosis: The root cause preventing the completion of dependency resolution and thus the identification of any specific dependency conflicts is a `socket.timeout` during a network read operation while pip operates under Python 3.9.25.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Result: No compatible versions were found. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'torch'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+       Checking dynamic availability for blocker: local_file
+  [!] PyPI Lookup Error for local_file: No details about project 'local_file' available at https://pypi.org/simple/local-file/
+       -> [STABLE] local_file is at latest version or lookup failed.
+       Checking dynamic availability for blocker: genexpr
+  [!] PyPI Lookup Error for genexpr: No details about project 'genexpr' available at https://pypi.org/simple/genexpr/
+       -> [STABLE] genexpr is at latest version or lookup failed.
+       Checking dynamic availability for blocker: return
+  [!] PyPI Lookup Error for return: No details about project 'return' available at https://pypi.org/simple/return/
+       -> [STABLE] return is at latest version or lookup failed.
+       CRITICAL: Blockers identified, but no newer versions exist to resolve conflict.
+  -> Result for torch: Reverted/Kept at 1.7.1 (No Change).
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 1 | ATTEMPT 2/5] Processing 'numpy'
+PULSE: Changed packages this pass so far: set()
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to numpy==2.4.2
+
+::group::Probe: Install & Validate for numpy==2.4.2
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The dependency conflict stems from the requested `numpy==2.4.2` requiring a Python version of `>=3.11`, while the current environment uses an older, incompatible Python version, causing the appropriate `numpy` distribution to be ignored.'
+    Suspected Blockers (Regex): ['numpy']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'numpy': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of numpy==2.4.2...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.4.2` being ignored because it requires Python `>=3.11`, leaving only `numpy` versions up to `2.0.2` as available and compatible with the current Python environment.
+  -> Checking compatibility of numpy==2.4.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.4.1` (along with `numpy` versions `2.3.0` through `2.4.2` and others) requires Python >=3.11, which is not compatible with the current Python environment and leads to these versions being ignored and `2.4.1` not found.
+  -> Checking compatibility of numpy==2.4.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.4.0` requires Python >=3.11, a condition not met by the current environment, which causes this version and other listed versions like `1.16.0` and `2.3.0` to be ignored and unavailable.
+  -> Checking compatibility of numpy==2.3.5...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.3.5` requiring Python version `>=3.11`, which the current Python environment does not meet, leading to it being ignored and ultimately not found.
+  -> Checking compatibility of numpy==2.3.4...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.3.4` cannot be installed because it explicitly `Requires-Python >=3.11`, and thus is ignored by the current, older Python environment.
+  -> Checking compatibility of numpy==2.3.3...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.3.3` requiring Python `>=3.11`, which is incompatible with the current environment, leading to versions like `2.3.0` through `2.3.5` being ignored.
+  -> Checking compatibility of numpy==2.3.2...
+     -- Incompatible. Diagnosis: The dependency conflict is caused because the required `numpy==2.3.2` was ignored as it `Requires-Python >=3.11`, meaning the current Python environment is incompatible with that specific package version.
+  -> Checking compatibility of numpy==2.3.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.3.1` (along with versions from `2.3.0` through `2.4.2`) requiring Python >=3.11, which is newer than the current Python environment, leading to these compatible `numpy` versions being ignored and `2.3.1` not found.
+  -> Checking compatibility of numpy==2.3.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the current Python environment being incompatible with `numpy==2.3.0`, as this specific version requires Python >=3.11 and was thus ignored.
+  -> Checking compatibility of numpy==2.2.6...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested package `numpy==2.2.6` (and other versions like `1.14.0` through `1.15.3`, `2.1.0` through `2.2.5`, etc.) requiring Python 3.10 or newer, while the current Python environment is an older version, leading to these compatible `numpy` versions being ignored.
+  -> Checking compatibility of numpy==2.2.5...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.2.5` requiring a Python version of `>=3.10`, which is newer than the Python environment currently in use, thus making `numpy==2.2.5` unavailable.
+  -> Checking compatibility of numpy==2.2.4...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.2.4` was ignored because the current Python environment is older than its requirement of Python >=3.10, a situation that also led to the ignoring of other incompatible versions like `1.14.0`, `1.15.0`, `1.16.0`, `1.17.0`, `12.0.0`, `2.1.0`, `2.2.0`, `2.2.1`, `2.2.2`, `2.2.3`, `2.2.5`, `2.2.6`, `2.3.0`, and `2.4.0` due to similar Python version requirements.
+  -> Checking compatibility of numpy==2.2.3...
+     -- Incompatible. Diagnosis: The dependency conflict occurs because the required package `numpy==2.2.3` requires a Python version of `>=3.10`, which is not met by the current environment, causing it to be ignored.
+  -> Checking compatibility of numpy==2.2.2...
+     -- Incompatible. Diagnosis: The dependency conflict for `numpy==2.2.2` stems from it requiring Python >=3.10, which caused pip to ignore `numpy` versions `2.2.0` through `2.2.6` (and other newer versions) because the current Python environment is older.
+  -> Checking compatibility of numpy==2.2.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.2.1` (and other versions from `2.2.0` to `2.2.6`) requiring Python >=3.10, which is incompatible with the current Python environment, leading to these specific versions being ignored and unavailable.
+  -> Checking compatibility of numpy==2.2.0...
+     -- Incompatible. Diagnosis: The dependency conflict stems from the requirement for `numpy==2.2.0` (and other recent versions like `1.14.0`, `1.15.0`, `1.16.0`, `2.1.0`, `2.3.0`, `2.4.0`, `12.0.0`) to run on Python 3.10 or newer, which is incompatible with the currently used Python environment, causing these versions to be ignored.
+  -> Checking compatibility of numpy==2.1.3...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.1.3` (along with versions `2.1.0`, `2.1.1`, and `2.1.2`) requires Python `>=3.10`, but the current Python environment is older, causing these specific versions to be ignored and no matching distribution to be found.
+  -> Checking compatibility of numpy==2.1.2...
+     -- Incompatible. Diagnosis: The dependency conflict is rooted in the current Python environment being incompatible with the requested `numpy==2.1.2` (and other versions like `2.1.0`, `2.1.1`, `2.1.3`, up to `2.4.2`), as these specific versions require Python >=3.10 and were consequently ignored.
+  -> Checking compatibility of numpy==2.1.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.1.1` (along with `numpy` versions from `2.1.0` through `2.4.2`, and other specific versions like `1.14.0` through `1.17.0`, and `12.0.0` through `12.1.1` for various packages) requires Python 3.10 or newer, but the current Python environment is older, making these versions unavailable.
+  -> Checking compatibility of numpy==2.1.0...
+     -- Incompatible. Diagnosis: The dependency conflict's root cause is that the requested `numpy==2.1.0` (and other 2.x versions like `2.1.1`, `2.2.0`, `2.3.0`, `2.4.0`) requires Python 3.10 or higher, making it incompatible with the current Python environment, so only versions up to `numpy==2.0.2` are available.
+  -> Checking compatibility of numpy==2.0.2...
+     -- Compatible.
+  -> Checking compatibility of numpy==2.0.1...
+     -- Compatible.
+  -> Checking compatibility of numpy==2.0.0...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.26.4...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.26.3...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.26.2...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.26.1...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.26.0...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.25.2...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.25.1...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.25.0...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.24.4...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.24.3...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.24.2...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.24.1...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.24.0...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.23.5...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.23.4...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.23.3...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.23.2...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.23.1...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.23.0...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.22.4...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.22.3...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.22.2...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.22.1...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.22.0...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.21.6...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.21.5...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.21.4...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.21.3...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.21.2...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.21.1...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.21.0...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.20.3...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.20.2...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.20.1...
+     -- Compatible.
+  -> Checking compatibility of numpy==1.20.0...
+     -- Compatible.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Found 38 compatible versions to test: ['2.0.2', '2.0.1', '2.0.0', '1.26.4', '1.26.3', '1.26.2', '1.26.1', '1.26.0', '1.25.2', '1.25.1', '1.25.0', '1.24.4', '1.24.3', '1.24.2', '1.24.1', '1.24.0', '1.23.5', '1.23.4', '1.23.3', '1.23.2', '1.23.1', '1.23.0', '1.22.4', '1.22.3', '1.22.2', '1.22.1', '1.22.0', '1.21.6', '1.21.5', '1.21.4', '1.21.3', '1.21.2', '1.21.1', '1.21.0', '1.20.3', '1.20.2', '1.20.1', '1.20.0']
+
+::group::Probe: Install & Validate for numpy==2.0.2
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+
+
+STDERR:
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.2 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 190, in <module>
+    from torch._C import *
+Traceback (most recent call last):
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 190, in <module>
+    from torch._C import *
+AttributeError: _ARRAY_API not found
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for numpy==2.0.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+
+
+STDERR:
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.1 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 190, in <module>
+    from torch._C import *
+Traceback (most recent call last):
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 190, in <module>
+    from torch._C import *
+AttributeError: _ARRAY_API not found
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for numpy==2.0.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+
+
+STDERR:
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.0 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 190, in <module>
+    from torch._C import *
+Traceback (most recent call last):
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 190, in <module>
+    from torch._C import *
+AttributeError: _ARRAY_API not found
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for numpy==1.26.4
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+Smoke test PASSED.
+::endgroup::
+--> SUCCESS: Probe passed.
+::endgroup::
+
+SUCCESS: Found latest working version: numpy==1.26.4
+::endgroup::
+--> Healing Result: Level 1 Succeeded. Found new working version: 1.26.4
+  -> SUCCESS. Locking in numpy==1.26.4
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 1 | ATTEMPT 3/5] Processing 'Pillow'
+PULSE: Changed packages this pass so far: {'numpy'}
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to Pillow==12.1.1
+
+::group::Probe: Install & Validate for Pillow==12.1.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The dependency conflict arises because the requested Pillow versions `12.0.0`, `12.1.0`, and `12.1.1` require Python 3.10 or newer, but the current Python environment does not meet this requirement.'
+    Suspected Blockers (Regex): ['pillow']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'Pillow': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of Pillow==12.1.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `Pillow==12.1.1` requiring a Python version of `>=3.10`, which is not met by the current Python environment.
+  -> Checking compatibility of Pillow==12.1.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `Pillow==12.1.0` (and `12.0.0`) requiring Python >=3.10, which is incompatible with the current Python environment, leading to these versions being ignored and only older `Pillow` versions up to `11.3.0` being available.
+  -> Checking compatibility of Pillow==12.0.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `Pillow==12.0.0` requires Python >=3.10, which is incompatible with the current environment, leading to it and all other listed versions (from `1.14.0` through `2.4.2`, including `12.1.0` and `12.1.1`) being ignored due to their Python version requirements.
+  -> Checking compatibility of Pillow==11.3.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==11.2.1...
+     -- Compatible.
+  -> Checking compatibility of Pillow==11.1.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==11.0.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.4.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.3.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.2.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.1.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.0.1...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.0.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==9.5.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==9.4.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==9.3.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==9.2.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==9.1.1...
+     -- Compatible.
+  -> Checking compatibility of Pillow==9.1.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==9.0.1...
+     -- Compatible.
+  -> Checking compatibility of Pillow==9.0.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==8.4.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==8.3.2...
+     -- Compatible.
+  -> Checking compatibility of Pillow==8.3.1...
+     -- Compatible.
+  -> Checking compatibility of Pillow==8.3.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==8.2.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==8.1.2...
+     -- Compatible.
+  -> Checking compatibility of Pillow==8.1.1...
+     -- Compatible.
+  -> Checking compatibility of Pillow==8.1.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==8.0.1...
+     -- Compatible.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Found 27 compatible versions to test: ['11.3.0', '11.2.1', '11.1.0', '11.0.0', '10.4.0', '10.3.0', '10.2.0', '10.1.0', '10.0.1', '10.0.0', '9.5.0', '9.4.0', '9.3.0', '9.2.0', '9.1.1', '9.1.0', '9.0.1', '9.0.0', '8.4.0', '8.3.2', '8.3.1', '8.3.0', '8.2.0', '8.1.2', '8.1.1', '8.1.0', '8.0.1']
+
+::group::Probe: Install & Validate for Pillow==11.3.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==11.2.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==11.1.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==11.0.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.4.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.3.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.2.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.1.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.0.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.0.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==9.5.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+Smoke test PASSED.
+::endgroup::
+--> SUCCESS: Probe passed.
+::endgroup::
+
+SUCCESS: Found latest working version: Pillow==9.5.0
+::endgroup::
+--> Healing Result: Level 1 Succeeded. Found new working version: 9.5.0
+  -> SUCCESS. Locking in Pillow==9.5.0
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 1 | ATTEMPT 4/5] Processing 'scipy'
+PULSE: Changed packages this pass so far: {'numpy', 'Pillow'}
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to scipy==1.17.0
+
+::group::Probe: Install & Validate for scipy==1.17.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The root cause of the dependency conflict is that the requested `scipy==1.17.0` requires `Python >=3.11`, but the current Python environment is older, causing `pip` to ignore all versions from `1.14.0` (which requires `Python >=3.10`) to `1.17.0` and higher, ultimately finding no matching distribution and leaving only `scipy` versions up to `1.13.1` available.'
+    Suspected Blockers (Regex): ['scipy']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'scipy': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of scipy==1.17.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by attempting to install `scipy==1.17.0`, which explicitly requires Python 3.11 or higher, in an environment running an older, incompatible Python version, leading to `scipy==1.17.0` being ignored.
+  -> Checking compatibility of scipy==1.16.3...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the required package `scipy==1.16.3` demanding Python version `>=3.11`, while the current Python environment does not meet this requirement, leading to the version being ignored and no matching distribution found.
+  -> Checking compatibility of scipy==1.16.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `scipy==1.16.2` requires Python >=3.11, but the current Python environment does not meet this requirement, leading to versions like `1.16.0` through `1.17.0rc2` being ignored.
+  -> Checking compatibility of scipy==1.16.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `scipy==1.16.1` requiring `Python >=3.11`, which the current environment does not meet, leading `pip` to ignore it and only find older compatible versions ranging from `0.8.0` to `1.13.1`.
+  -> Checking compatibility of scipy==1.16.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because the requested `scipy==1.16.0` requires Python version `>=3.11`, which is incompatible with the current environment, causing this specific version and other `scipy` versions like `1.14.0`, `1.15.0`, `1.17.0`, `2.3.0`, and `12.0.0` to be ignored by the installer.
+  -> Checking compatibility of scipy==1.15.3...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `scipy==1.15.3` requiring Python >=3.10, but the current Python environment is an incompatible lower version, leading to `scipy==1.15.3` being ignored and no matching distribution found.
+  -> Checking compatibility of scipy==1.15.2...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `scipy==1.15.2` requiring Python version `3.10` or higher, which is incompatible with the current environment, leading to all `scipy` versions from `1.14.0` up to `1.17.0` (including `12.0.0` to `12.1.1` and `2.1.0` to `2.4.2`) being ignored.
+  -> Checking compatibility of scipy==1.15.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `scipy==1.15.1` package requiring a Python version of `>=3.10`, which is not met by the current Python environment.
+  -> Checking compatibility of scipy==1.15.0...
+     -- Incompatible. Diagnosis: The dependency conflict's root cause is that the requested `scipy==1.15.0` and other newer versions (including `1.14.0`, `1.15.0rc1` through `1.15.3`, `1.16.0` through `1.16.3`, `1.17.0` through `1.17.0rc2`, `2.1.0` through `2.4.2`, and `12.0.0` through `12.1.1`) require Python versions `>=3.10` or `>=3.11`, making them incompatible with the current Python environment.
+  -> Checking compatibility of scipy==1.14.1...
+     -- Incompatible. Diagnosis: The dependency conflict for `scipy==1.14.1` is rooted in the requirement that this specific version, along with many others, needs Python >=3.10, which is not satisfied by the current Python environment.
+  -> Checking compatibility of scipy==1.14.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `scipy==1.14.0` (along with other versions like `1.15.0`, `1.16.0`, `1.17.0`, `12.0.0`, and `2.1.0`) was ignored because it requires a Python version (either `>=3.10` or `>=3.11`) newer than the one currently in use.
+  -> Checking compatibility of scipy==1.13.1...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.13.0...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.12.0...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.11.4...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.11.3...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.11.2...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.11.1...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.11.0...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.10.1...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.10.0...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.9.3...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by numpy==1.26.4, scipy==1.9.3, torch==1.7.1, and torchvision==0.8.2 having mutually incompatible requirements that prevent their simultaneous installation.
+  -> Checking compatibility of scipy==1.9.2...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `numpy==1.26.4`, `scipy==1.9.2`, `torch==1.7.1`, and `torchvision==0.8.2` have conflicting dependencies and cannot be installed simultaneously.
+  -> Checking compatibility of scipy==1.9.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by numpy==1.26.4, scipy==1.9.1, torch==1.7.1, and torchvision==0.8.2 having incompatible sub-dependency requirements that prevent their simultaneous installation.
+  -> Checking compatibility of scipy==1.9.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because the specified versions of numpy (1.26.4), scipy (1.9.0), torch (1.7.1), and torchvision (0.8.2) have mutually incompatible dependencies.
+  -> Checking compatibility of scipy==1.8.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `numpy==1.26.4`, `scipy==1.8.1`, `torch==1.7.1`, and `torchvision==0.8.2` have conflicting dependencies among themselves.
+  -> Checking compatibility of scipy==1.8.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `numpy==1.26.4`, `scipy==1.8.0`, `torch==1.7.1`, and `torchvision==0.8.2` have incompatible dependency requirements with each other.
+  -> Checking compatibility of scipy==1.7.3...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `numpy==1.26.4`, `scipy==1.7.3`, `torch==1.7.1`, and `torchvision==0.8.2` have conflicting dependencies that prevent their simultaneous installation.
+  -> Checking compatibility of scipy==1.7.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `numpy==1.26.4`, `scipy==1.7.2`, `torch==1.7.1`, and `torchvision==0.8.2` have conflicting dependencies among themselves.
+  -> Checking compatibility of scipy==1.7.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because installing `numpy==1.26.4`, `scipy==1.7.1`, `torch==1.7.1`, and `torchvision==0.8.2` simultaneously results in conflicting requirements among their respective dependencies.
+  -> Checking compatibility of scipy==1.7.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the mutually incompatible dependency requirements among the specified package versions: numpy==1.26.4, scipy==1.7.0, torch==1.7.1, and torchvision==0.8.2.
+  -> Checking compatibility of scipy==1.6.3...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `numpy==1.26.4`, `scipy==1.6.3`, `torch==1.7.1`, and `torchvision==0.8.2` have internal dependencies that are incompatible with each other when installed simultaneously.
+  -> Checking compatibility of scipy==1.6.2...
+     -- Incompatible. Diagnosis: The dependency conflict's root cause is that `numpy==1.26.4`, `scipy==1.6.2`, `torch==1.7.1`, and `torchvision==0.8.2` have conflicting dependencies, preventing their simultaneous installation.
+  -> Checking compatibility of scipy==1.6.1...
+     -- Compatible.
+  -> Checking compatibility of scipy==1.6.0...
+     -- Compatible.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Found 12 compatible versions to test: ['1.13.1', '1.13.0', '1.12.0', '1.11.4', '1.11.3', '1.11.2', '1.11.1', '1.11.0', '1.10.1', '1.10.0', '1.6.1', '1.6.0']
+
+::group::Probe: Install & Validate for scipy==1.13.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+Smoke test PASSED.
+::endgroup::
+--> SUCCESS: Probe passed.
+::endgroup::
+
+SUCCESS: Found latest working version: scipy==1.13.1
+::endgroup::
+--> Healing Result: Level 1 Succeeded. Found new working version: 1.13.1
+  -> SUCCESS. Locking in scipy==1.13.1
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 1 | ATTEMPT 5/5] Processing 'torchvision'
+PULSE: Changed packages this pass so far: {'numpy', 'scipy', 'Pillow'}
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to torchvision==0.25.0
+
+::group::Probe: Install & Validate for torchvision==0.25.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The dependency conflict's root cause is that the current Python environment's version is too old to support `torchvision==0.25.0`, which is not found among available versions (`0.1.6` through `0.23.0`), and is further confirmed by the ignored versions of other dependencies (e.g., `1.14.0`, `1.16.0`, `2.3.0`, `12.0.0`) requiring Python `>=3.10` or `>=3.11`.'
+    Suspected Blockers (Regex): ['torchvision']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'torchvision': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of torchvision==0.25.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the current Python environment is too old to satisfy the requirement for `torchvision==0.25.0`, as all compatible `torchvision` versions available for the current Python are older (up to `0.23.0`), and newer versions like `1.14.0`, `2.3.0`, and `12.0.0` explicitly require Python 3.10 or higher.
+  -> Checking compatibility of torchvision==0.24.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torchvision==0.24.1` is not an available package version, as distributions are only found up to `0.23.0`, compounded by an older Python environment that ignores various other package versions such as `1.14.0` (Requires-Python >=3.10) and `1.16.0` (Requires-Python >=3.11).
+  -> Checking compatibility of torchvision==0.24.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torchvision==0.24.0` is not found among the available versions, which range from `0.1.6` to `0.23.0`, while pip also ignored numerous other package versions (specifically `1.14.0`, `1.14.0rc1`, `1.14.0rc2`, `1.14.1`, `1.15.0`, `1.15.0rc1`, `1.15.0rc2`, `1.15.1`, `1.15.2`, `1.15.3`, `1.16.0`, `1.16.0rc1`, `1.16.0rc2`, `1.16.1`, `1.16.2`, `1.16.3`, `1.17.0`, `1.17.0rc1`, `1.17.0rc2`, `12.0.0`, `12.1.0`, `12.1.1`, `2.1.0`, `2.1.1`, `2.1.2`, `2.1.3`, `2.2.0`, `2.2.1`, `2.2.2`, `2.2.3`, `2.2.4`, `2.2.5`, `2.2.6`, `2.3.0`, `2.3.1`, `2.3.2`, `2.3.3`, `2.3.4`, `2.3.5`, `2.4.0`, `2.4.0rc1`, `2.4.1`, `2.4.2`) because they require a different Python version (>=3.10 or >=3.11).
+  -> Checking compatibility of torchvision==0.23.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.23.0` have conflicting sub-dependencies, preventing their simultaneous installation.
+  -> Checking compatibility of torchvision==0.22.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==1.7.1` and `torchvision==0.22.1` having conflicting dependencies with each other.
+  -> Checking compatibility of torchvision==0.22.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by torch==1.7.1 and torchvision==0.22.0 having conflicting dependencies when installed together.
+  -> Checking compatibility of torchvision==0.21.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.21.0` have conflicting dependencies that prevent them from being installed together.
+  -> Checking compatibility of torchvision==0.20.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by torch==1.7.1 and torchvision==0.20.1 requiring incompatible versions of their respective dependencies.
+  -> Checking compatibility of torchvision==0.20.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.20.0` have conflicting dependencies between themselves.
+  -> Checking compatibility of torchvision==0.19.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.19.1` have incompatible dependency requirements, preventing them from being installed together.
+  -> Checking compatibility of torchvision==0.19.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.7.1` and `torchvision==0.19.0` have incompatible internal dependencies.
+  -> Checking compatibility of torchvision==0.18.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.18.1` have conflicting dependencies, making their simultaneous installation impossible.
+  -> Checking compatibility of torchvision==0.18.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.7.1` and `torchvision==0.18.0` have incompatible dependency requirements with each other.
+  -> Checking compatibility of torchvision==0.17.2...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.7.1` and `torchvision==0.17.2` have conflicting requirements for their shared dependencies.
+  -> Checking compatibility of torchvision==0.17.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.7.1` and `torchvision==0.17.1` have incompatible or conflicting dependencies with each other.
+  -> Checking compatibility of torchvision==0.17.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.7.1` and `torchvision==0.17.0` have incompatible requirements for their underlying sub-dependencies.
+  -> Checking compatibility of torchvision==0.16.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.16.2` have conflicting dependencies that prevent them from being installed together.
+  -> Checking compatibility of torchvision==0.16.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because the specific package versions `torch==1.7.1` and `torchvision==0.16.1` have incompatible underlying dependencies.
+  -> Checking compatibility of torchvision==0.16.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.16.0` have incompatible sub-dependencies.
+  -> Checking compatibility of torchvision==0.15.2...
+     -- Incompatible. Diagnosis: The root cause is that `torch==1.7.1` and `torchvision==0.15.2` have conflicting dependencies with each other.
+  -> Checking compatibility of torchvision==0.15.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because installing `torch==1.7.1` and `torchvision==0.15.1` simultaneously leads to incompatible dependency requirements between these two specific package versions.
+  -> Checking compatibility of torchvision==0.15.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.7.1` and `torchvision==0.15.0` have incompatible underlying requirements that prevent them from being installed together.
+  -> Checking compatibility of torchvision==0.14.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.14.1` have conflicting dependencies between themselves.
+  -> Checking compatibility of torchvision==0.14.0...
+     -- Incompatible. Diagnosis: `torch==1.7.1` and `torchvision==0.14.0` cannot be installed together because they have conflicting dependencies.
+  -> Checking compatibility of torchvision==0.13.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.7.1` and `torchvision==0.13.1` have conflicting requirements among their respective dependencies, preventing them from being installed together.
+  -> Checking compatibility of torchvision==0.13.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.13.0` have conflicting internal dependencies, preventing their simultaneous installation.
+  -> Checking compatibility of torchvision==0.12.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.7.1` and `torchvision==0.12.0` have conflicting dependencies that prevent them from being installed together.
+  -> Checking compatibility of torchvision==0.11.3...
+     -- Incompatible. Diagnosis: The dependency conflict arises because installing `torch==1.7.1` and `torchvision==0.11.3` simultaneously introduces conflicting dependencies.
+  -> Checking compatibility of torchvision==0.11.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.11.2` have conflicting dependencies that prevent them from being installed together.
+  -> Checking compatibility of torchvision==0.11.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.7.1` and `torchvision==0.11.1` have incompatible dependencies, preventing their simultaneous installation.
+  -> Checking compatibility of torchvision==0.11.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==1.7.1` and `torchvision==0.11.0` having conflicting dependencies with each other.
+  -> Checking compatibility of torchvision==0.10.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because torch==1.7.1 and torchvision==0.10.1 have conflicting internal dependencies that prevent their simultaneous installation.
+  -> Checking compatibility of torchvision==0.10.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that **torch==1.7.1** and **torchvision==0.10.0** have incompatible dependencies with each other.
+  -> Checking compatibility of torchvision==0.9.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.7.1` and `torchvision==0.9.1` have incompatible dependency requirements.
+  -> Checking compatibility of torchvision==0.9.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because installing `torch==1.7.1` and `torchvision==0.9.0` simultaneously leads to incompatible requirements between their respective dependencies.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Result: No compatible versions were found. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'torchvision'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+       Checking dynamic availability for blocker: torch
+       -> [DYNAMIC FIX] torch can be modernized (1.7.1 -> 2.10.0)
+
+::group::Co-Resolution Probe: Testing plan ['torchvision==0.25.0', 'torch==2.10.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir Pillow==9.5.0 numpy==1.26.4 scipy==1.13.1 typing_extensions==4.15.0 torchvision==0.25.0 torch==2.10.0' in CWD: '.'
+--> ERROR: Co-resolution installation failed.
+    Diagnosis: The dependency conflict is caused by the requested `torchvision==0.25.0` not being found among the available distributions, which only extend up to version `0.23.0`.
+::endgroup::
+
+    -> [Greedy Expansion Iteration 2/5]
+
+       Greedy Heuristic exhausted. Handing dynamic context to Expert.
+
+    -> [LLM Refinement Attempt 1/3] Requesting Expert Plan...
+
+::group::Co-Resolution Probe: Testing plan ['torchvision==0.9.0', 'torch==1.8.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir Pillow==9.5.0 numpy==1.26.4 scipy==1.13.1 typing_extensions==4.15.0 torchvision==0.9.0 torch==1.8.0' in CWD: '.'
+
+--> Stage 2: Skipped (Project is not an installable package).
+
+--> Stage 3: Running validation suite on the co-resolution set...
+
+::group::Validating Co-Resolution Plan
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+Smoke test PASSED.
+::endgroup::
+--> SUCCESS: The co-resolution plan is provably working.
+::endgroup::
+  -> SUCCESS. Locking in torchvision==0.9.0
+  -> Co-Resolution Side-Effect: Locked in torch==1.8.0
+::endgroup::
+
+Pass complete with changes.
+
+::group::UPDATE PASS 2/3
+
+Prioritized Update Plan for this Pass (Highest Risk First):
+Rank  | Package                        | % of Total Risk    | Change
+----- | ------------------------------ | ------------------ | --------------------
+1     | torch                          | 25.00             % | 1.8.0 -> 2.10.0
+2     | numpy                          | 25.00             % | 1.26.4 -> 2.4.2
+3     | Pillow                         | 25.00             % | 9.5.0 -> 12.1.1
+4     | scipy                          | 12.50             % | 1.13.1 -> 1.17.0
+5     | torchvision                    | 12.50             % | 0.9.0 -> 0.25.0
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 2 | ATTEMPT 1/5] Processing 'torch'
+PULSE: Changed packages this pass so far: set()
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to torch==2.10.0
+
+::group::Probe: Install & Validate for torch==2.10.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The dependency conflict's root cause is that the requested `torch==2.10.0` cannot be found among the available `torch` versions (`1.7.1` through `2.8.0`), and higher `torch` versions such as `1.14.0` (Requires-Python >=3.10) and `2.4.2` (Requires-Python >=3.11) are explicitly ignored due to Python environment incompatibility, strongly suggesting `2.10.0` also requires a newer Python version.'
+    Suspected Blockers (Regex): ['torch']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'torch': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of torch==2.10.0...
+     -- Incompatible. Diagnosis: The dependency conflict's root cause is that the requested `torch==2.10.0` cannot be found as a matching distribution, with `torch==2.8.0` being the highest available version, likely due to the current Python environment being too old as indicated by many `torch` versions from `1.14.0` up to `2.4.2` being ignored for requiring Python `>=3.10` or `>=3.11`.
+  -> Checking compatibility of torch==2.9.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torch==2.9.1` is not found among the distributions available (ranging from `1.7.1` to `2.8.0`) and compatible with the current Python environment, which has further constrained options by ignoring many newer `torch` versions like `1.14.0`, `1.15.0`, `1.16.0`, `1.17.0`, `12.0.0`, `2.1.0`, `2.3.0`, and `2.4.0` due to their Python >=3.10 or >=3.11 requirements.
+  -> Checking compatibility of torch==2.9.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the required `torch==2.9.0` is unavailable for the current environment, as only versions `1.7.1` through `2.8.0` were found and many other package versions, such as `1.14.0` and `2.3.0`, were ignored due to requiring a higher Python version (>=3.10 or >=3.11).
+  -> Checking compatibility of torch==2.8.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==2.8.0` and `torchvision==0.9.0` have conflicting dependencies that prevent them from being installed together.
+  -> Checking compatibility of torch==2.7.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.7.1` and `torchvision==0.9.0` have conflicting underlying dependencies, making them incompatible for installation together.
+  -> Checking compatibility of torch==2.7.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.7.0` and `torchvision==0.9.0` have conflicting dependencies, preventing their co-installation.
+  -> Checking compatibility of torch==2.6.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==2.6.0` and `torchvision==0.9.0` have incompatible requirements with each other.
+  -> Checking compatibility of torch==2.5.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.5.1` and `torchvision==0.9.0` have conflicting dependencies.
+  -> Checking compatibility of torch==2.5.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.5.0` and `torchvision==0.9.0` have conflicting dependency requirements, preventing their simultaneous installation.
+  -> Checking compatibility of torch==2.4.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.4.1` and `torchvision==0.9.0` have incompatible dependencies with each other.
+  -> Checking compatibility of torch==2.4.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.4.0` and `torchvision==0.9.0` have conflicting dependencies.
+  -> Checking compatibility of torch==2.3.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because **torch==2.3.1** and **torchvision==0.9.0** have incompatible or conflicting dependencies with each other.
+  -> Checking compatibility of torch==2.3.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.3.0` and `torchvision==0.9.0` have conflicting dependencies.
+  -> Checking compatibility of torch==2.2.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.2.2` and `torchvision==0.9.0` have conflicting dependencies and cannot be installed together.
+  -> Checking compatibility of torch==2.2.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the incompatibility between `torch==2.2.1` and `torchvision==0.9.0`, as these specific package versions have conflicting dependencies.
+  -> Checking compatibility of torch==2.2.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.2.0` and `torchvision==0.9.0` cannot be installed together because they have incompatible dependency requirements.
+  -> Checking compatibility of torch==2.1.2...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==2.1.2` and `torchvision==0.9.0` have conflicting requirements for their underlying dependencies.
+  -> Checking compatibility of torch==2.1.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.1.1` and `torchvision==0.9.0` have conflicting internal dependencies that prevent them from being installed together.
+  -> Checking compatibility of torch==2.1.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.1.0` and `torchvision==0.9.0` have conflicting dependencies, preventing their simultaneous installation.
+  -> Checking compatibility of torch==2.0.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.0.1` and `torchvision==0.9.0` have incompatible dependencies with each other.
+  -> Checking compatibility of torch==2.0.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==2.0.0` and `torchvision==0.9.0` have conflicting internal dependencies, preventing their simultaneous installation.
+  -> Checking compatibility of torch==1.13.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.13.1` and `torchvision==0.9.0` have conflicting underlying dependencies, making them incompatible to install together.
+  -> Checking compatibility of torch==1.13.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.13.0` and `torchvision==0.9.0` have conflicting dependencies, preventing their simultaneous installation.
+  -> Checking compatibility of torch==1.12.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==1.12.1` and `torchvision==0.9.0` having conflicting dependencies with each other.
+  -> Checking compatibility of torch==1.12.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==1.12.0` and `torchvision==0.9.0` having incompatible internal dependencies.
+  -> Checking compatibility of torch==1.11.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==1.11.0` and `torchvision==0.9.0` having incompatible dependencies with each other.
+  -> Checking compatibility of torch==1.10.2...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==1.10.2` and `torchvision==0.9.0` having incompatible internal dependencies.
+  -> Checking compatibility of torch==1.10.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.10.1` and `torchvision==0.9.0` have conflicting underlying dependencies which prevent their simultaneous installation.
+  -> Checking compatibility of torch==1.10.0...
+     -- Incompatible. Diagnosis: The provided log does not detail a dependency conflict; instead, the root cause of the encountered issue is a `socket.timeout` during pip's operations, preventing further progress on a system running Python 3.9, thus no conflicting package versions are reported.
+  -> Checking compatibility of torch==1.9.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that installing `torch==1.9.1` and `torchvision==0.9.0` simultaneously results in conflicting underlying package dependencies.
+  -> Checking compatibility of torch==1.9.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.9.0` and `torchvision==0.9.0` have conflicting internal dependencies, preventing their simultaneous installation.
+  -> Checking compatibility of torch==1.8.1...
+     -- Incompatible. Diagnosis: The root cause of the failure in pip's dependency resolution is a `socket.timeout` during a network read operation, which prevents the identification and logging of any specific conflicting package versions beyond the Python `3.9` environment.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Result: No compatible versions were found. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'torch'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+       Checking dynamic availability for blocker: local_file
+  [!] PyPI Lookup Error for local_file: No details about project 'local_file' available at https://pypi.org/simple/local-file/
+       -> [STABLE] local_file is at latest version or lookup failed.
+       Checking dynamic availability for blocker: genexpr
+  [!] PyPI Lookup Error for genexpr: No details about project 'genexpr' available at https://pypi.org/simple/genexpr/
+       -> [STABLE] genexpr is at latest version or lookup failed.
+       Checking dynamic availability for blocker: return
+  [!] PyPI Lookup Error for return: No details about project 'return' available at https://pypi.org/simple/return/
+       -> [STABLE] return is at latest version or lookup failed.
+       CRITICAL: Blockers identified, but no newer versions exist to resolve conflict.
+  -> Result for torch: Reverted/Kept at 1.8.0 (No Change).
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 2 | ATTEMPT 2/5] Processing 'numpy'
+PULSE: Changed packages this pass so far: set()
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to numpy==2.4.2
+
+::group::Probe: Install & Validate for numpy==2.4.2
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The root cause of the dependency conflict is that the requested `numpy==2.4.2` requires Python version 3.11 or newer (`Requires-Python >=3.11`), but the current Python environment does not meet this requirement, leading to `numpy==2.4.2` being ignored and subsequently not found.'
+    Suspected Blockers (Regex): ['numpy']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'numpy': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of numpy==2.4.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the required `numpy==2.4.2` cannot be installed because it, along with other newer `numpy` versions such as `1.14.0` through `1.17.0rc2`, `12.0.0` through `12.1.1`, and `2.1.0` through `2.4.2`, were ignored for requiring a higher Python version (>=3.10 or >=3.11) than the one currently in use.
+  -> Checking compatibility of numpy==2.4.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.4.1` (along with versions `2.4.0`, `2.4.0rc1`, `2.4.2`) requiring Python >=3.11, while the current Python environment is an older, incompatible version, leading to these specific distributions being ignored and unfulfillable.
+  -> Checking compatibility of numpy==2.4.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.4.0` (and related versions `2.4.0rc1`, `2.4.1`, `2.4.2`) requiring Python >=3.11, which is not met by the current Python environment, leading `pip` to ignore these versions and thus fail to find a matching distribution.
+  -> Checking compatibility of numpy==2.3.5...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the current Python environment failing to meet the minimum version requirements, specifically Python >=3.11 for the requested `numpy==2.3.5` and `1.16.0`, and Python >=3.10 for other versions like `1.14.0` and `12.0.0`, leading to these distributions being ignored.
+  -> Checking compatibility of numpy==2.3.4...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.3.4` (along with other specific versions like `1.14.0` and `2.4.2`) requires a Python version of at least `3.10` or `3.11`, which is incompatible with the current Python environment, causing them to be ignored.
+  -> Checking compatibility of numpy==2.3.3...
+     -- Incompatible. Diagnosis: The dependency conflict occurs because the required `numpy==2.3.3` (along with versions `2.3.0` through `2.4.2`) needs Python `>=3.11`, but the current Python environment is an older version, causing `pip` to ignore these incompatible `numpy` versions and fail to find a matching distribution.
+  -> Checking compatibility of numpy==2.3.2...
+     -- Incompatible. Diagnosis: The dependency conflict is rooted in the current Python environment being an older version, which fails to satisfy the `Requires-Python >=3.11` requirement for the requested `numpy==2.3.2` and other recent versions like `2.3.0` through `2.4.2`, causing them to be ignored.
+  -> Checking compatibility of numpy==2.3.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.3.1` (along with other `numpy` versions like `2.3.0` through `2.4.2` and `1.16.0` through `1.17.0rc2`) requires Python >=3.11, which is not met by the current Python environment.
+  -> Checking compatibility of numpy==2.3.0...
+     -- Incompatible. Diagnosis: The dependency conflict's root cause is that the required `numpy==2.3.0` is not an available distribution, as the listed `numpy` versions only range from `1.3.0` up to `2.0.2`.
+  -> Checking compatibility of numpy==2.2.6...
+     -- Incompatible. Diagnosis: The dependency conflict for `numpy==2.2.6` is caused by the current Python environment being too old, which results in the requested `numpy==2.2.6` and other potentially compatible `numpy` versions (such as `1.14.0` through `1.17.0`, `2.1.0` through `2.2.5`, and `2.3.0` through `2.4.2`) being ignored because they require Python 3.10 or newer.
+  -> Checking compatibility of numpy==2.2.5...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the current Python environment is incompatible with the requested `numpy==2.2.5` because this version, along with other `numpy` versions from `2.1.0` to `2.4.2`, requires Python versions >=3.10 or >=3.11, leading to them being ignored while only `numpy` versions up to `2.0.2` are available.
+  -> Checking compatibility of numpy==2.2.4...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.2.4` cannot be installed because it, along with other versions such as `2.1.0` through `2.2.6`, explicitly `Requires-Python >=3.10`, which is not met by the current Python environment.
+  -> Checking compatibility of numpy==2.2.3...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.2.3` (and other versions like `2.1.0` through `2.2.6`) requiring Python 3.10 or higher, which is incompatible with the current Python environment and thus causes these versions to be ignored.
+  -> Checking compatibility of numpy==2.2.2...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.2.2` and other modern versions, including `2.1.0` through `2.2.6` (requiring Python >=3.10) and `2.3.0` through `2.4.2` (requiring Python >=3.11), being incompatible with the current Python environment, leading to their unavailability.
+  -> Checking compatibility of numpy==2.2.1...
+     -- Incompatible. Diagnosis: The dependency conflict's root cause is that the explicitly required `numpy==2.2.1` is ignored because it, along with other `numpy` versions (e.g., `2.1.0` through `2.4.2`, and `1.14.0` through `1.17.0`), demands Python version `>=3.10` or `>=3.11`, rendering it incompatible with the current environment, while all other available `numpy` versions (ranging from `1.3.0` to `2.0.2`) do not satisfy the strict `==2.2.1` constraint.
+  -> Checking compatibility of numpy==2.2.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.2.0` and other `numpy` versions such as `2.1.0` through `2.2.6` are ignored because they require Python 3.10 or newer, which is incompatible with the current Python environment.
+  -> Checking compatibility of numpy==2.1.3...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the required `numpy==2.1.3` and many other `numpy` versions (specifically `1.14.0` through `1.17.0`, `12.0.0` through `12.1.1`, and `2.1.0` through `2.4.2`) were ignored because they demand Python 3.10 or 3.11, which the current environment does not meet.
+  -> Checking compatibility of numpy==2.1.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.1.2` (along with `numpy` versions from `1.14.0` up to `2.4.2`) requires a Python version of at least `3.10` or `3.11`, which is incompatible with the current Python environment.
+  -> Checking compatibility of numpy==2.1.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.1.1` (along with versions such as `2.1.0` through `2.4.2`, `1.14.0` through `1.17.0`, and `12.0.0` through `12.1.1` mentioned in the log) requires Python version >=3.10 or >=3.11, which is incompatible with the current Python environment.
+  -> Checking compatibility of numpy==2.1.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.1.0` requiring `Python >=3.10`, which is incompatible with the current Python environment, leading pip to ignore `numpy` versions such as `1.14.0`, `2.1.0`, and `12.0.0` that also have this or a higher Python version requirement.
+  -> Checking compatibility of numpy==2.0.2...
+     -- Compatible.
+  -> Checking compatibility of numpy==2.0.1...
+     -- Compatible.
+  -> Checking compatibility of numpy==2.0.0...
+     -- Compatible.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Found 3 compatible versions to test: ['2.0.2', '2.0.1', '2.0.0']
+
+::group::Probe: Install & Validate for numpy==2.0.2
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+
+
+STDERR:
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.2 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 196, in <module>
+    from torch._C import *
+Traceback (most recent call last):
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 196, in <module>
+    from torch._C import *
+AttributeError: _ARRAY_API not found
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for numpy==2.0.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+
+
+STDERR:
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.1 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 196, in <module>
+    from torch._C import *
+Traceback (most recent call last):
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 196, in <module>
+    from torch._C import *
+AttributeError: _ARRAY_API not found
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for numpy==2.0.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+
+
+STDERR:
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.0 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 196, in <module>
+    from torch._C import *
+Traceback (most recent call last):
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py", line 2, in <module>
+    import torch
+  File "/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/__init__.py", line 196, in <module>
+    from torch._C import *
+AttributeError: _ARRAY_API not found
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+Result: No compatible version passed validation. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'numpy'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+
+::group::Co-Resolution Probe: Testing plan ['numpy==2.4.2']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir Pillow==9.5.0 scipy==1.13.1 torch==1.8.0 torchvision==0.9.0 typing_extensions==4.15.0 numpy==2.4.2' in CWD: '.'
+--> ERROR: Co-resolution installation failed.
+    Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.4.2` and other versions like `1.14.0`, `1.16.0`, `2.3.0`, and `12.0.0` were ignored because they require a higher Python version (specifically `>=3.11` for `2.4.2`) than the current environment provides.
+::endgroup::
+
+    -> [Greedy Expansion Iteration 2/5]
+
+       Greedy Heuristic exhausted. Handing dynamic context to Expert.
+
+    -> [LLM Refinement Attempt 1/3] Requesting Expert Plan...
+  -> Result for numpy: Reverted/Kept at 1.26.4 (No Change).
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 2 | ATTEMPT 3/5] Processing 'Pillow'
+PULSE: Changed packages this pass so far: set()
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to Pillow==12.1.1
+
+::group::Probe: Install & Validate for Pillow==12.1.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The dependency conflict is caused by the current Python environment not meeting the `Requires-Python >=3.10` requirement for the desired `Pillow` versions `12.0.0`, `12.1.0`, and `12.1.1`, leading to them being ignored and `Pillow==12.1.1` not being found.'
+    Suspected Blockers (Regex): ['pillow']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'Pillow': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of Pillow==12.1.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `Pillow==12.1.1` (along with versions `12.0.0` and `12.1.0`) requiring Python >=3.10, which is a newer version than the current Python environment.
+  -> Checking compatibility of Pillow==12.1.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `Pillow==12.1.0` (and other recent versions like `1.14.0`, `2.1.0`, `12.0.0`, etc.) requiring Python 3.10 or higher, which is incompatible with the currently used Python environment.
+  -> Checking compatibility of Pillow==12.0.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `Pillow==12.0.0` requires Python version `>=3.10`, but the current Python environment does not meet this requirement, causing that specific version to be ignored.
+  -> Checking compatibility of Pillow==11.3.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==11.2.1...
+     -- Compatible.
+  -> Checking compatibility of Pillow==11.1.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==11.0.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.4.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.3.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.2.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.1.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.0.1...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.0.0...
+     -- Compatible.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Found 10 compatible versions to test: ['11.3.0', '11.2.1', '11.1.0', '11.0.0', '10.4.0', '10.3.0', '10.2.0', '10.1.0', '10.0.1', '10.0.0']
+
+::group::Probe: Install & Validate for Pillow==11.3.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==11.2.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==11.1.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==11.0.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.4.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.3.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.2.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.1.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.0.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.0.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+Result: No compatible version passed validation. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'Pillow'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+
+::group::Co-Resolution Probe: Testing plan ['Pillow==12.1.1']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir numpy==1.26.4 scipy==1.13.1 torch==1.8.0 torchvision==0.9.0 typing_extensions==4.15.0 Pillow==12.1.1' in CWD: '.'
+--> ERROR: Co-resolution installation failed.
+    Diagnosis: The dependency conflict is caused by the required `Pillow==12.1.1` package needing Python version 3.10 or higher, while the current Python environment is using an older version, leading to `Pillow==12.1.1` being ignored.
+::endgroup::
+
+    -> [Greedy Expansion Iteration 2/5]
+
+       Greedy Heuristic exhausted. Handing dynamic context to Expert.
+
+    -> [LLM Refinement Attempt 1/3] Requesting Expert Plan...
+
+::group::Co-Resolution Probe: Testing plan ['Pillow==11.3.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir numpy==1.26.4 scipy==1.13.1 torch==1.8.0 torchvision==0.9.0 typing_extensions==4.15.0 Pillow==11.3.0' in CWD: '.'
+
+--> Stage 2: Skipped (Project is not an installable package).
+
+--> Stage 3: Running validation suite on the co-resolution set...
+
+::group::Validating Co-Resolution Plan
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/lib/python3.9/site-packages/torch/nn/functional.py:1709: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+
+--- End of Full Output ---
+::endgroup::
+--> ERROR: Validation failed for the co-resolution set.
+::endgroup::
+
+    -> [LLM Refinement Attempt 2/3] Requesting Expert Plan...
+  -> Result for Pillow: Reverted/Kept at 9.5.0 (No Change).
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 2 | ATTEMPT 4/5] Processing 'scipy'
+PULSE: Changed packages this pass so far: set()
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to scipy==1.17.0
+
+::group::Probe: Install & Validate for scipy==1.17.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The dependency conflict's root cause is that the requested `scipy==1.17.0` was ignored because it explicitly requires Python version 3.11 or higher, which is not met by the current Python environment.'
+    Suspected Blockers (Regex): ['scipy']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'scipy': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of scipy==1.17.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `scipy==1.17.0` requires Python version 3.11 or higher, which is incompatible with the current Python environment.
+  -> Checking compatibility of scipy==1.16.3...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `scipy==1.16.3` requires Python version 3.11 or newer, but the current Python environment is an older version, causing `scipy==1.16.3` and other versions requiring Python >=3.10 or >=3.11 to be ignored.
+  -> Checking compatibility of scipy==1.16.2...
+     -- Incompatible. Diagnosis: The dependency conflict is rooted in the current Python environment being an older version, rendering it incompatible with the requested `scipy==1.16.2` (which requires Python >=3.11) and causing `pip` to ignore all newer `scipy` versions, including `1.14.0` through `1.17.0`, due to their Python >=3.10 or >=3.11 requirements.
+  -> Checking compatibility of scipy==1.16.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because the required `scipy==1.16.1` (and other versions like `1.16.0` through `1.17.0`) explicitly `Requires-Python >=3.11`, but the current Python environment is an older version, leading `pip` to ignore all compatible `1.16.x` distributions.
+  -> Checking compatibility of scipy==1.16.0...
+     -- Incompatible. Diagnosis: The dependency conflict's root cause is that the required `scipy==1.16.0` (along with other versions ranging from `1.14.0` to `1.17.0rc2`) demands a newer Python version (>=3.10 or >=3.11) than the current environment, making these versions incompatible and leaving `scipy` up to `1.13.1` as the only installable options.
+  -> Checking compatibility of scipy==1.15.3...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `scipy==1.15.3` could not be found because it, along with other versions such as `1.14.0`, `1.14.0rc1`, `1.14.0rc2`, `1.14.1`, `1.15.0`, `1.15.0rc1`, `1.15.0rc2`, `1.15.1`, `1.15.2`, `1.15.3`, `1.16.0`, `1.16.0rc1`, `1.16.0rc2`, `1.16.1`, `1.16.2`, `1.16.3`, `1.17.0`, `1.17.0rc1`, `1.17.0rc2`, `12.0.0`, `12.1.0`, `12.1.1`, `2.1.0`, `2.1.1`, `2.1.2`, `2.1.3`, `2.2.0`, `2.2.1`, `2.2.2`, `2.2.3`, `2.2.4`, `2.2.5`, `2.2.6`, `2.3.0`, `2.3.1`, `2.3.2`, `2.3.3`, `2.3.4`, `2.3.5`, `2.4.0`, `2.4.0rc1`, `2.4.1`, `2.4.2`, all require a Python version of at least 3.10 or 3.11, which is incompatible with the current Python environment.
+  -> Checking compatibility of scipy==1.15.2...
+     -- Incompatible. Diagnosis: The dependency conflict is rooted in the required `scipy==1.15.2` package version demanding Python >=3.10, which is incompatible with the current environment's older Python version, causing `scipy==1.15.2` to be ignored and unavailable.
+  -> Checking compatibility of scipy==1.15.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `scipy==1.15.1` requiring Python >=3.10, while the current Python environment is an older, incompatible version, leading to no matching distribution being found.
+  -> Checking compatibility of scipy==1.15.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `scipy==1.15.0` (and all other `scipy` versions from `1.14.0` onwards, up to `1.15.3` requiring Python >=3.10, and versions `1.16.0` onwards requiring Python >=3.11) being incompatible with the current Python environment, which is older than Python 3.10.
+  -> Checking compatibility of scipy==1.14.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `scipy==1.14.1` cannot be installed because it, along with all other ignored versions mentioned in the log (1.14.0, 1.14.0rc1, 1.14.0rc2, 1.15.0, 1.15.0rc1, 1.15.0rc2, 1.15.1, 1.15.2, 1.15.3, 1.16.0, 1.16.0rc1, 1.16.0rc2, 1.16.1, 1.16.2, 1.16.3, 1.17.0, 1.17.0rc1, 1.17.0rc2, 12.0.0, 12.1.0, 12.1.1, 2.1.0, 2.1.1, 2.1.2, 2.1.3, 2.2.0, 2.2.1, 2.2.2, 2.2.3, 2.2.4, 2.2.5, 2.2.6, 2.3.0, 2.3.1, 2.3.2, 2.3.3, 2.3.4, 2.3.5, 2.4.0, 2.4.0rc1, 2.4.1, and 2.4.2), requires a Python version of 3.10 or newer (with some requiring 3.11), which is not met by the current environment.
+  -> Checking compatibility of scipy==1.14.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `scipy==1.14.0` requires Python >=3.10, which the current environment does not provide, leading to `1.14.0` and other versions such as `1.15.0`, `1.16.0`, `12.0.0`, and `2.3.0` being ignored because they also require a higher Python version.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Result: No compatible versions were found. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'scipy'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+
+::group::Co-Resolution Probe: Testing plan ['scipy==1.17.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir Pillow==9.5.0 numpy==1.26.4 torch==1.8.0 torchvision==0.9.0 typing_extensions==4.15.0 scipy==1.17.0' in CWD: '.'
+--> ERROR: Co-resolution installation failed.
+    Diagnosis: The dependency conflict is caused by the currently used Python version being too old to support the required `scipy==1.17.0`, as `scipy` versions `1.14.0` through `1.17.0` require Python >=3.10 or >=3.11 and were ignored, leaving only `scipy` versions `0.8.0` through `1.13.1` as compatible.
+::endgroup::
+
+    -> [Greedy Expansion Iteration 2/5]
+
+       Greedy Heuristic exhausted. Handing dynamic context to Expert.
+
+    -> [LLM Refinement Attempt 1/3] Requesting Expert Plan...
+  -> Result for scipy: Reverted/Kept at 1.13.1 (No Change).
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 2 | ATTEMPT 5/5] Processing 'torchvision'
+PULSE: Changed packages this pass so far: set()
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to torchvision==0.25.0
+
+::group::Probe: Install & Validate for torchvision==0.25.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The dependency conflict is caused by the request for `torchvision==0.25.0`, a version that is not found as a matching distribution, with the available versions for `torchvision` ranging only from `0.1.6` to `0.23.0`.'
+    Suspected Blockers (Regex): ['torchvision']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'torchvision': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of torchvision==0.25.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torchvision==0.25.0` is not available among the found `torchvision` versions, which range from `0.1.6` to `0.23.0`.
+  -> Checking compatibility of torchvision==0.24.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torchvision==0.24.1` is incompatible with the current Python environment, as it implicitly requires a higher Python version than installed, similar to how versions `1.14.0` (Requires-Python >=3.10) and `1.16.0` (Requires-Python >=3.11) of other packages were ignored, leaving only `torchvision` versions from `0.1.6` to `0.23.0` as available.
+  -> Checking compatibility of torchvision==0.24.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the current Python environment is incompatible with the requested `torchvision==0.24.0`, which is not found among available versions `0.1.6` through `0.23.0`, and similarly causes other package versions such as `1.14.0`, `1.16.0`, `2.3.0`, and `12.0.0` to be ignored due to their Python >=3.10 or >=3.11 requirements.
+  -> Checking compatibility of torchvision==0.23.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.8.0` and `torchvision==0.23.0` require incompatible versions of one or more of their common dependencies.
+  -> Checking compatibility of torchvision==0.22.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.8.0` and `torchvision==0.22.1` have incompatible dependency requirements with each other.
+  -> Checking compatibility of torchvision==0.22.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==1.8.0` and `torchvision==0.22.0` having incompatible requirements among their respective dependencies.
+  -> Checking compatibility of torchvision==0.21.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.8.0` and `torchvision==0.21.0` have incompatible internal dependency requirements that prevent them from being installed together.
+  -> Checking compatibility of torchvision==0.20.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.8.0` and `torchvision==0.20.1` have conflicting dependencies, preventing them from being installed together.
+  -> Checking compatibility of torchvision==0.20.0...
+     -- Incompatible. Diagnosis: `torch==1.8.0` and `torchvision==0.20.0` cannot be installed together because they have conflicting dependencies.
+  -> Checking compatibility of torchvision==0.19.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.8.0` and `torchvision==0.19.1` have conflicting internal dependencies that prevent them from being installed together.
+  -> Checking compatibility of torchvision==0.19.0...
+     -- Incompatible. Diagnosis: Torch==1.8.0 and torchvision==0.19.0 cannot be installed together because these specific package versions have conflicting dependencies.
+  -> Checking compatibility of torchvision==0.18.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because installing `torch==1.8.0` and `torchvision==0.18.1` simultaneously leads to incompatible requirements from their respective dependencies.
+  -> Checking compatibility of torchvision==0.18.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the inability to install `torch==1.8.0` and `torchvision==0.18.0` together, as these specific package versions have conflicting dependencies with each other.
+  -> Checking compatibility of torchvision==0.17.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that installing `torch==1.8.0` and `torchvision==0.17.2` simultaneously leads to conflicting dependencies between them.
+  -> Checking compatibility of torchvision==0.17.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.8.0` and `torchvision==0.17.1` have incompatible or conflicting dependencies that prevent them from being installed together.
+  -> Checking compatibility of torchvision==0.17.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because installing `torch==1.8.0` and `torchvision==0.17.0` simultaneously introduces conflicting dependencies between them.
+  -> Checking compatibility of torchvision==0.16.2...
+     -- Incompatible. Diagnosis: The dependency conflict arises because installing `torch==1.8.0` and `torchvision==0.16.2` simultaneously leads to incompatible dependency requirements between these specific package versions.
+  -> Checking compatibility of torchvision==0.16.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.8.0` and `torchvision==0.16.1` have conflicting dependencies.
+  -> Checking compatibility of torchvision==0.16.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.8.0` and `torchvision==0.16.0` have incompatible underlying dependency requirements with each other.
+  -> Checking compatibility of torchvision==0.15.2...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by `torch==1.8.0` and `torchvision==0.15.2` having incompatible underlying dependencies.
+  -> Checking compatibility of torchvision==0.15.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.8.0` and `torchvision==0.15.1` have conflicting dependencies, preventing them from being installed together.
+  -> Checking compatibility of torchvision==0.15.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.8.0` and `torchvision==0.15.0` have conflicting sub-dependencies that cannot be simultaneously satisfied.
+  -> Checking compatibility of torchvision==0.14.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that installing `torch==1.8.0` and `torchvision==0.14.1` simultaneously leads to incompatible dependency requirements.
+  -> Checking compatibility of torchvision==0.14.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.8.0` and `torchvision==0.14.0` have incompatible sub-dependency requirements that prevent their simultaneous installation.
+  -> Checking compatibility of torchvision==0.13.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.8.0` and `torchvision==0.13.1` have incompatible dependency requirements.
+  -> Checking compatibility of torchvision==0.13.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.8.0` and `torchvision==0.13.0` cannot be installed together due to their conflicting underlying dependencies.
+  -> Checking compatibility of torchvision==0.12.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the inability to install `torch==1.8.0` and `torchvision==0.12.0` simultaneously because these specific package versions have incompatible underlying dependencies.
+  -> Checking compatibility of torchvision==0.11.3...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.8.0` and `torchvision==0.11.3` have conflicting underlying dependencies that cannot be simultaneously satisfied.
+  -> Checking compatibility of torchvision==0.11.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `torch==1.8.0` and `torchvision==0.11.2` have conflicting dependencies that prevent their simultaneous installation.
+  -> Checking compatibility of torchvision==0.11.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.8.0` and `torchvision==0.11.1` have conflicting internal dependency requirements.
+  -> Checking compatibility of torchvision==0.11.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because `torch==1.8.0` and `torchvision==0.11.0` have mutually incompatible dependency requirements.
+  -> Checking compatibility of torchvision==0.10.1...
+     -- Incompatible. Diagnosis: The conflict arises because `torch==1.8.0` and `torchvision==0.10.1` have incompatible or conflicting dependencies.
+  -> Checking compatibility of torchvision==0.10.0...
+     -- Incompatible. Diagnosis: The dependency conflict arises because installing `torch==1.8.0` and `torchvision==0.10.0` simultaneously leads to incompatible requirements among their underlying dependencies.
+  -> Checking compatibility of torchvision==0.9.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the incompatible dependency requirements between `torch==1.8.0` and `torchvision==0.9.1`.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Result: No compatible versions were found. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'torchvision'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+       Checking dynamic availability for blocker: torch
+       -> [DYNAMIC FIX] torch can be modernized (1.8.0 -> 2.10.0)
+
+::group::Co-Resolution Probe: Testing plan ['torchvision==0.25.0', 'torch==2.10.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir Pillow==9.5.0 numpy==1.26.4 scipy==1.13.1 typing_extensions==4.15.0 torchvision==0.25.0 torch==2.10.0' in CWD: '.'
+--> ERROR: Co-resolution installation failed.
+    Diagnosis: The root cause of the dependency conflict is that the current Python environment is implicitly older than 3.10, making the requested `torchvision==0.25.0` unavailable because it, like other ignored versions such as `1.14.0`, `2.1.0`, and `12.0.0`, requires Python version 3.10 or newer.
+::endgroup::
+
+    -> [Greedy Expansion Iteration 2/5]
+
+       Greedy Heuristic exhausted. Handing dynamic context to Expert.
+
+    -> [LLM Refinement Attempt 1/3] Requesting Expert Plan...
+
+::group::Co-Resolution Probe: Testing plan ['torch==2.10.0', 'torchvision==0.16.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir Pillow==9.5.0 numpy==1.26.4 scipy==1.13.1 typing_extensions==4.15.0 torch==2.10.0 torchvision==0.16.0' in CWD: '.'
+--> ERROR: Co-resolution installation failed.
+    Diagnosis: The root cause of the dependency conflict is that the requested `torch==2.10.0` version is not found among the available `torch` distributions, which range from `1.7.1` to `2.8.0`.
+::endgroup::
+
+    -> [LLM Refinement Attempt 2/3] Requesting Expert Plan...
+
+::group::Co-Resolution Probe: Testing plan ['torch==2.8.0', 'torchvision==0.23.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir Pillow==9.5.0 numpy==1.26.4 scipy==1.13.1 typing_extensions==4.15.0 torch==2.8.0 torchvision==0.23.0' in CWD: '.'
+
+--> Stage 2: Skipped (Project is not an installable package).
+
+--> Stage 3: Running validation suite on the co-resolution set...
+
+::group::Validating Co-Resolution Plan
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+Smoke test PASSED.
+::endgroup::
+--> SUCCESS: The co-resolution plan is provably working.
+::endgroup::
+  -> Co-Resolution Side-Effect: Locked in torch==2.8.0
+  -> SUCCESS. Locking in torchvision==0.23.0
+::endgroup::
+
+Pass complete with changes.
+
+::group::UPDATE PASS 3/3
+
+Prioritized Update Plan for this Pass (Highest Risk First):
+Rank  | Package                        | % of Total Risk    | Change
+----- | ------------------------------ | ------------------ | --------------------
+1     | numpy                          | 28.57             % | 1.26.4 -> 2.4.2
+2     | Pillow                         | 28.57             % | 9.5.0 -> 12.1.1
+3     | torch                          | 14.29             % | 2.8.0 -> 2.10.0
+4     | scipy                          | 14.29             % | 1.13.1 -> 1.17.0
+5     | torchvision                    | 14.29             % | 0.23.0 -> 0.25.0
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 3 | ATTEMPT 1/5] Processing 'numpy'
+PULSE: Changed packages this pass so far: set()
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to numpy==2.4.2
+
+::group::Probe: Install & Validate for numpy==2.4.2
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The root cause of the dependency conflict is that the requested `numpy==2.4.2` requires Python >=3.11, but the current Python environment does not meet this minimum version requirement, leading to no matching distribution being found.'
+    Suspected Blockers (Regex): ['numpy']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'numpy': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of numpy==2.4.2...
+     -- Incompatible. Diagnosis: The dependency conflict occurs because the requested `numpy==2.4.2` (along with `2.4.0`, `2.4.0rc1`, and `2.4.1`) requires Python version >=3.11, but the current Python environment does not satisfy this requirement, leading to these versions being ignored and unavailable.
+  -> Checking compatibility of numpy==2.4.1...
+     -- Incompatible. Diagnosis: The dependency conflict is rooted in the requirement for `numpy==2.4.1` (and other versions such as `1.16.0` and `2.3.0`) which demands Python >=3.11, while the current Python environment is an older version, rendering these packages incompatible and thus unavailable.
+  -> Checking compatibility of numpy==2.4.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the required `numpy==2.4.0` (along with versions like `1.16.0`, `2.3.0`, `2.4.1`, `2.4.2`, etc.) demands Python `>=3.11`, which is incompatible with the current Python environment, leading to its unavailability.
+  -> Checking compatibility of numpy==2.3.5...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.3.5` specifically `Requires-Python >=3.11`, which is incompatible with the current environment's Python version, causing it to be ignored and unavailable for installation.
+  -> Checking compatibility of numpy==2.3.4...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.3.4` was ignored, along with other `numpy` versions like `1.14.0` (requiring Python >=3.10) and `2.3.0` (requiring Python >=3.11), because the current Python environment does not meet the minimum Python version requirement of 3.11 needed for `numpy==2.3.4`.
+  -> Checking compatibility of numpy==2.3.3...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.3.3` requiring Python version `>=3.11`, which the current environment does not meet, leading to this version being ignored and consequently not found.
+  -> Checking compatibility of numpy==2.3.2...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requirement for `numpy==2.3.2` (and related versions `2.3.0` through `2.3.5`) which mandates Python >=3.11, while the current Python environment is incompatible.
+  -> Checking compatibility of numpy==2.3.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.3.1` and all other `numpy` versions explicitly listed as ignored (`2.1.0, 2.1.1, 2.1.2, 2.1.3, 2.2.0, 2.2.1, 2.2.2, 2.2.3, 2.2.4, 2.2.5, 2.2.6, 2.3.0, 2.3.1, 2.3.2, 2.3.3, 2.3.4, 2.3.5, 2.4.0, 2.4.0rc1, 2.4.1, 2.4.2`) require a Python version (>=3.10 or >=3.11) newer than the current environment, preventing `numpy==2.3.1` from being available.
+  -> Checking compatibility of numpy==2.3.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.3.0` cannot be found as it, along with other versions like `numpy==1.14.0` (requires Python >=3.10) and `numpy==1.16.0` (requires Python >=3.11), explicitly requires a Python version newer than the current environment's Python, causing these versions to be ignored.
+  -> Checking compatibility of numpy==2.2.6...
+     -- Incompatible. Diagnosis: The dependency conflict's root cause is that the requested `numpy==2.2.6` requires Python version `>=3.10`, which is incompatible with the current Python environment, leading to `2.2.6` and other `numpy` versions such as `1.14.0`, `1.15.0`, `1.16.0`, `2.1.0`, `2.3.0`, `2.4.0`, and `12.0.0` being ignored, resulting in no matching distribution found.
+  -> Checking compatibility of numpy==2.2.5...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.2.5` and other newer versions like `1.14.0`, `1.15.0`, `2.1.0`, `2.3.0`, and `2.4.0` require Python 3.10 or newer, making them incompatible with the current, older Python environment.
+  -> Checking compatibility of numpy==2.2.4...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requirement to install `numpy==2.2.4`, which cannot be satisfied because it explicitly requires `Python >=3.10`, a version different from the current Python environment.
+  -> Checking compatibility of numpy==2.2.3...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `numpy==2.2.3` (which falls within the `numpy` versions `2.2.0` through `2.2.6` mentioned in the log) requiring Python version `>=3.10`, which is incompatible with the current Python environment.
+  -> Checking compatibility of numpy==2.2.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the required `numpy==2.2.2` (which belongs to the range of ignored versions `2.2.0` through `2.2.6`) cannot be found because it, and other versions like `1.14.0`, `1.15.0`, `1.16.0`, `12.0.0`, `2.1.0`, `2.3.0`, and `2.4.0`, require Python >=3.10 or >=3.11, which is newer than the current Python environment.
+  -> Checking compatibility of numpy==2.2.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the current Python environment being too old for the requested `numpy==2.2.1`, which, like versions `2.1.0` and `2.2.0`, requires Python 3.10 or newer, thus making only `numpy` versions up to `2.0.2` available.
+  -> Checking compatibility of numpy==2.2.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.2.0` (along with other versions from `2.2.0` to `2.2.6`) requires Python version `>=3.10`, which is incompatible with the current Python environment.
+  -> Checking compatibility of numpy==2.1.3...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.1.3` requires Python version >=3.10, which is not satisfied by the current environment, leading to its unavailability along with other numpy versions like `2.1.0`, `2.1.1`, `2.1.2`, `2.2.x`, `2.3.x`, and `2.4.x`.
+  -> Checking compatibility of numpy==2.1.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.1.2` cannot be installed because it, along with specific `numpy` versions `2.1.0`, `2.1.1`, `2.1.2`, `2.2.0`, `2.2.1`, `2.2.2`, `2.2.3`, `2.2.4`, `2.2.5`, `2.2.6`, `2.3.0`, `2.3.1`, `2.3.2`, `2.3.3`, `2.3.4`, `2.3.5`, `2.4.0`, `2.4.0rc1`, `2.4.1`, and `2.4.2`, requires Python >=3.10 or >=3.11, which is not met by the current Python environment.
+  -> Checking compatibility of numpy==2.1.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the current Python environment is older than 3.10, causing `pip` to ignore the requested `numpy==2.1.1` (among other versions like `2.1.0` through `2.4.2`, `1.14.0` through `1.17.0`, and `12.0.0` through `12.1.1`) which require Python >=3.10, leaving `2.0.2` as the highest available version.
+  -> Checking compatibility of numpy==2.1.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `numpy==2.1.0`, as well as other newer versions like `2.1.1` and `2.3.0`, require a Python version (specifically `>=3.10` or `>=3.11`) that is incompatible with the Python environment currently in use, causing them to be ignored and unavailable.
+  -> Checking compatibility of numpy==2.0.2...
+     -- Compatible.
+  -> Checking compatibility of numpy==2.0.1...
+     -- Compatible.
+  -> Checking compatibility of numpy==2.0.0...
+     -- Compatible.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Found 3 compatible versions to test: ['2.0.2', '2.0.1', '2.0.0']
+
+::group::Probe: Install & Validate for numpy==2.0.2
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+Smoke test PASSED.
+::endgroup::
+--> SUCCESS: Probe passed.
+::endgroup::
+
+SUCCESS: Found latest working version: numpy==2.0.2
+::endgroup::
+--> Healing Result: Level 1 Succeeded. Found new working version: 2.0.2
+  -> SUCCESS. Locking in numpy==2.0.2
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 3 | ATTEMPT 2/5] Processing 'Pillow'
+PULSE: Changed packages this pass so far: {'numpy'}
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to Pillow==12.1.1
+
+::group::Probe: Install & Validate for Pillow==12.1.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The root cause of the dependency conflict is that the requested Pillow versions `12.0.0`, `12.1.0`, and `12.1.1` require Python 3.10 or newer, but the current Python environment does not satisfy this version requirement, causing these specific versions to be ignored.'
+    Suspected Blockers (Regex): ['pillow']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'Pillow': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of Pillow==12.1.1...
+     -- Incompatible. Diagnosis: The dependency conflict occurs because the requested `Pillow==12.1.1` (as well as versions `12.0.0` and `12.1.0`) requires Python >= 3.10, but these versions are ignored by the current Python environment, which is too old.
+  -> Checking compatibility of Pillow==12.1.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `Pillow==12.1.0` and other newer versions like `1.14.0`, `1.16.0`, `2.3.0`, and `12.0.0` requiring Python >=3.10 or >=3.11, which makes them incompatible with and ignored by the current Python environment.
+  -> Checking compatibility of Pillow==12.0.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `Pillow==12.0.0` requiring Python >=3.10, which the current Python environment does not satisfy, leading to it being ignored.
+  -> Checking compatibility of Pillow==11.3.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==11.2.1...
+     -- Compatible.
+  -> Checking compatibility of Pillow==11.1.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==11.0.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.4.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.3.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.2.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.1.0...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.0.1...
+     -- Compatible.
+  -> Checking compatibility of Pillow==10.0.0...
+     -- Compatible.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Found 10 compatible versions to test: ['11.3.0', '11.2.1', '11.1.0', '11.0.0', '10.4.0', '10.3.0', '10.2.0', '10.1.0', '10.0.1', '10.0.0']
+
+::group::Probe: Install & Validate for Pillow==11.3.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==11.2.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==11.1.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==11.0.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.4.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.3.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.2.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.1.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.0.1
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+::group::Probe: Install & Validate for Pillow==10.0.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+
+--> Probe Step 3: Running validation suite...
+
+::group::Running Validation
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+::endgroup::
+
+Result: No compatible version passed validation. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'Pillow'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+
+::group::Co-Resolution Probe: Testing plan ['Pillow==12.1.1']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir numpy==2.0.2 scipy==1.13.1 torch==2.8.0 torchvision==0.23.0 typing_extensions==4.15.0 Pillow==12.1.1' in CWD: '.'
+--> ERROR: Co-resolution installation failed.
+    Diagnosis: The dependency conflict arises because the requested `Pillow==12.1.1` cannot be installed as it, along with `Pillow` versions `12.0.0` and `12.1.0`, requires `Python >=3.10`, which is not met by the current Python environment.
+::endgroup::
+
+    -> [Greedy Expansion Iteration 2/5]
+
+       Greedy Heuristic exhausted. Handing dynamic context to Expert.
+
+    -> [LLM Refinement Attempt 1/3] Requesting Expert Plan...
+
+::group::Co-Resolution Probe: Testing plan ['Pillow==11.3.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir numpy==2.0.2 scipy==1.13.1 torch==2.8.0 torchvision==0.23.0 typing_extensions==4.15.0 Pillow==11.3.0' in CWD: '.'
+
+--> Stage 2: Skipped (Project is not an installable package).
+
+--> Stage 3: Running validation suite on the co-resolution set...
+
+::group::Validating Co-Resolution Plan
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+--> ERROR: Validation failed for the co-resolution set.
+::endgroup::
+
+    -> [LLM Refinement Attempt 2/3] Requesting Expert Plan...
+
+::group::Co-Resolution Probe: Testing plan ['Pillow==11.3.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir numpy==2.0.2 scipy==1.13.1 torch==2.8.0 torchvision==0.23.0 typing_extensions==4.15.0 Pillow==11.3.0' in CWD: '.'
+
+--> Stage 2: Skipped (Project is not an installable package).
+
+--> Stage 3: Running validation suite on the co-resolution set...
+
+::group::Validating Co-Resolution Plan
+
+--- Running Smoke Test ---
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/validation_vae.py' in CWD: '.'
+--- Smoke Test Full Output ---
+STDOUT:
+--- 🧬 VAE API Integrity Check ---
+SUCCESS: F.sigmoid alias is functional.
+CRITICAL: PILLOW ROT! Image.ANTIALIAS was removed.
+
+
+STDERR:
+
+--- End of Full Output ---
+::endgroup::
+--> ERROR: Validation failed for the co-resolution set.
+::endgroup::
+
+    -> [LLM Refinement Attempt 3/3] Requesting Expert Plan...
+  -> Result for Pillow: Reverted/Kept at 9.5.0 (No Change).
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 3 | ATTEMPT 3/5] Processing 'torch'
+PULSE: Changed packages this pass so far: {'numpy'}
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to torch==2.10.0
+
+::group::Probe: Install & Validate for torch==2.10.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The dependency conflict arises because the requested `torch==2.10.0` is not found among the available `torch` distributions (`1.7.1` through `2.8.0`), nor is it present in the list of versions ignored due to requiring Python >=3.10 or >=3.11 (which includes `1.14.0` through `2.4.2`, and `12.0.0` to `12.1.1`).'
+    Suspected Blockers (Regex): ['torch']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'torch': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of torch==2.10.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the current Python environment is too old for the requested `torch==2.10.0`, which is not found among the compatible versions available (ranging from `1.7.1` to `2.8.0`), a situation further evidenced by the ignored package versions such as `1.14.0` (Requires-Python >=3.10), `2.1.0` (Requires-Python >=3.10), and `2.3.0` (Requires-Python >=3.11).
+  -> Checking compatibility of torch==2.9.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torch==2.9.1` is not available among the discoverable `torch` versions (`1.7.1` through `2.8.0`), further compounded by the current Python environment being incompatible with many other versions, specifically `1.14.0`, `1.14.0rc1`, `1.14.0rc2`, `1.14.1`, `1.15.0`, `1.15.0rc1`, `1.15.0rc2`, `1.15.1`, `1.15.2`, `1.15.3`, `1.16.0`, `1.16.0rc1`, `1.16.0rc2`, `1.16.1`, `1.16.2`, `1.16.3`, `1.17.0`, `1.17.0rc1`, `1.17.0rc2`, `12.0.0`, `12.1.0`, `12.1.1`, `2.1.0`, `2.1.1`, `2.1.2`, `2.1.3`, `2.2.0`, `2.2.1`, `2.2.2`, `2.2.3`, `2.2.4`, `2.2.5`, `2.2.6`, `2.3.0`, `2.3.1`, `2.3.2`, `2.3.3`, `2.3.4`, `2.3.5`, `2.4.0`, `2.4.0rc1`, `2.4.1`, `2.4.2`, which require Python 3.10 or higher.
+  -> Checking compatibility of torch==2.9.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torch==2.9.0` cannot be found among the available distributions, which range from `1.7.1` to `2.8.0`, while numerous other versions such as `1.14.0` through `1.17.0`, `12.0.0` through `12.1.1`, and `2.1.0` through `2.4.2` were ignored because they require a different (higher) Python version (>=3.10 or >=3.11).
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Result: No compatible versions were found. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'torch'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+
+::group::Co-Resolution Probe: Testing plan ['torch==2.10.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir Pillow==9.5.0 numpy==2.0.2 scipy==1.13.1 torchvision==0.23.0 typing_extensions==4.15.0 torch==2.10.0' in CWD: '.'
+--> ERROR: Co-resolution installation failed.
+    Diagnosis: The root cause of the dependency conflict is that the current Python environment is too old, causing `torch` versions such as `2.1.0` (Requires-Python >=3.10) and `2.3.0` (Requires-Python >=3.11) to be ignored, and consequently preventing `pip` from finding the required `torch==2.10.0` among the available distributions, which are listed up to `2.8.0`.
+::endgroup::
+
+    -> [Greedy Expansion Iteration 2/5]
+
+       Greedy Heuristic exhausted. Handing dynamic context to Expert.
+
+    -> [LLM Refinement Attempt 1/3] Requesting Expert Plan...
+  -> Result for torch: Reverted/Kept at 2.8.0 (No Change).
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 3 | ATTEMPT 4/5] Processing 'scipy'
+PULSE: Changed packages this pass so far: {'numpy'}
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to scipy==1.17.0
+
+::group::Probe: Install & Validate for scipy==1.17.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The dependency conflict is caused by the requested `scipy==1.17.0` requiring Python 3.11 or higher, which is incompatible with the current Python environment, leading to its exclusion along with other newer `scipy` versions such as `1.16.0` (Python >=3.11) and `1.14.0` (Python >=3.10).'
+    Suspected Blockers (Regex): ['scipy']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'scipy': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of scipy==1.17.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `scipy==1.17.0` requiring Python version `>=3.11`, which is incompatible with the current Python environment.
+  -> Checking compatibility of scipy==1.16.3...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `scipy==1.16.3` requiring Python >=3.11, which the current environment does not meet, leading to this version being ignored and no matching distribution found.
+  -> Checking compatibility of scipy==1.16.2...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by requesting `scipy==1.16.2`, which, along with versions `1.16.0` through `1.17.0rc2` (and others like `1.14.0` through `1.15.3`), requires Python >=3.11, but the current Python environment is an older, incompatible version.
+  -> Checking compatibility of scipy==1.16.1...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the required `scipy==1.16.1` demanding Python 3.11 or newer, while the current Python environment is an older version, leading `pip` to ignore all compatible `scipy` versions.
+  -> Checking compatibility of scipy==1.16.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `scipy==1.16.0` (and other versions like `1.14.0`, `1.15.0`) was ignored because it requires a Python version (specifically `>=3.11` for `1.16.0`) that is incompatible with the current environment.
+  -> Checking compatibility of scipy==1.15.3...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `scipy==1.15.3` and other higher versions, including `1.14.0` through `1.17.0`, `2.1.0` through `2.4.2`, and `12.0.0` through `12.1.1`, being ignored because they require Python version `>=3.10` or `>=3.11`, which is incompatible with the current Python environment.
+  -> Checking compatibility of scipy==1.15.2...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the current Python environment is too old, failing to meet the `Requires-Python` constraints for desired `scipy==1.15.2` (which needs `>=3.10`) and other available package versions such as `1.14.0` and `2.1.0` (which require `>=3.10` or `>=3.11`), leading to them all being ignored.
+  -> Checking compatibility of scipy==1.15.1...
+     -- Incompatible. Diagnosis: The dependency conflict occurs because the requested `scipy==1.15.1` requires Python version 3.10 or newer, which causes it to be ignored in the current Python environment, making no matching distribution available.
+  -> Checking compatibility of scipy==1.15.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that `scipy==1.15.0` requires Python >=3.10, but the current Python environment is incompatible, leading to `scipy==1.15.0` being ignored and not found.
+  -> Checking compatibility of scipy==1.14.1...
+     -- Incompatible. Diagnosis: The dependency conflict arises because the requested `scipy==1.14.1` explicitly requires Python version `3.10` or higher, and the current Python environment does not satisfy this minimum version.
+  -> Checking compatibility of scipy==1.14.0...
+     -- Incompatible. Diagnosis: The dependency conflict is caused by the requested `scipy==1.14.0` requiring Python version >=3.10, which is not met by the current environment, leading to `scipy==1.14.0` being ignored and no matching distribution found.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Result: No compatible versions were found. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'scipy'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+
+::group::Co-Resolution Probe: Testing plan ['scipy==1.17.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir Pillow==9.5.0 numpy==2.0.2 torch==2.8.0 torchvision==0.23.0 typing_extensions==4.15.0 scipy==1.17.0' in CWD: '.'
+--> ERROR: Co-resolution installation failed.
+    Diagnosis: The root cause of the dependency conflict is that `scipy==1.17.0` requires Python >=3.11, but the current Python environment does not meet this requirement, causing `pip` to ignore the requested version.
+::endgroup::
+
+    -> [Greedy Expansion Iteration 2/5]
+
+       Greedy Heuristic exhausted. Handing dynamic context to Expert.
+
+    -> [LLM Refinement Attempt 1/3] Requesting Expert Plan...
+  -> Result for scipy: Reverted/Kept at 1.13.1 (No Change).
+
+--------------------------------------------------------------------------------
+PULSE: [PASS 3 | ATTEMPT 5/5] Processing 'torchvision'
+PULSE: Changed packages this pass so far: {'numpy'}
+--------------------------------------------------------------------------------
+
+--> Toplevel Attempt: Trying direct update to torchvision==0.25.0
+
+::group::Probe: Install & Validate for torchvision==0.25.0
+--> Probe Step 1: Installing the proposed dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/bin/python -m pip install --no-build-isolation --no-cache-dir -r /home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_venv/probe_requirements.txt' in CWD: '.'
+::endgroup::
+
+--> Toplevel Result: Direct update FAILED. Reason: 'Dependency installation failed: The root cause of the dependency conflict is that `torchvision==0.25.0` cannot be installed because the current Python environment is too old, leading to versions such as `1.14.0`, `1.16.0`, `12.0.0`, `2.1.0`, `2.3.0`, and `2.4.2` being ignored as they require Python >=3.10 or >=3.11.'
+    Suspected Blockers (Regex): ['torchvision']
+--> Action: Entering Level 1 Healing with 'Filter-Then-Scan' strategy.
+
+::group::Healing 'torchvision': Filter-Then-Scan Strategy
+
+--- Phase 1: Filtering for compatible versions ---
+  -> Checking compatibility of torchvision==0.25.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested package version `torchvision==0.25.0` is not available, with the highest listed distribution being `torchvision 0.23.0`.
+  -> Checking compatibility of torchvision==0.24.1...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the requested `torchvision==0.24.1` could not be found among the available versions (`0.1.6` through `0.23.0`), which occurred in an environment where numerous other package versions, including `1.14.0`, `1.15.0`, `1.16.0`, `1.17.0`, `12.0.0`, `2.1.0`, `2.2.0`, `2.3.0`, and `2.4.0`, were ignored due to requiring a different Python version (>=3.10 or >=3.11).
+  -> Checking compatibility of torchvision==0.24.0...
+     -- Incompatible. Diagnosis: The root cause of the dependency conflict is that the current Python environment is incompatible with `torchvision==0.24.0`, as `pip` ignored several versions of other dependencies, such as `1.14.0`, `1.16.0`, `12.0.0`, and `2.1.0`, which require Python versions >=3.10 or >=3.11, resulting in `torchvision==0.24.0` not being found among the available versions that only go up to `0.23.0`.
+
+--- Phase 2: Validating compatible versions (newest first) ---
+Result: No compatible versions were found. Reverting to last known good version.
+::endgroup::
+
+--> Action: Level 1 Healing failed for 'torchvision'. Escalating to Level 2 'Iterative Greedy Expansion'.
+
+    -> [Greedy Expansion Iteration 1/5]
+
+::group::Co-Resolution Probe: Testing plan ['torchvision==0.25.0']
+--> Stage 1: Installing the proposed co-resolution dependency set...
+--> Running command: '/home/runner/work/pytorch-beginner_AURA/pytorch-beginner_AURA/temp_co_res_venv/bin/python -m pip install --no-build-isolation --no-cache-dir Pillow==9.5.0 numpy==2.0.2 scipy==1.13.1 torch==2.8.0 typing_extensions==4.15.0 torchvision==0.25.0' in CWD: '.'
+--> ERROR: Co-resolution installation failed.
+    Diagnosis: The root cause of the dependency conflict is that the current Python environment is incompatible with required package versions, leading to versions like `1.14.0`, `1.16.0`, `2.3.0`, and `12.0.0` being ignored due to their Python `>=3.10` or `>=3.11` requirements, which in turn prevents the successful installation of the requested `torchvision==0.25.0`.
+::endgroup::
+
+    -> [Greedy Expansion Iteration 2/5]
+
+       Greedy Heuristic exhausted. Handing dynamic context to Expert.
+
+    -> [LLM Refinement Attempt 1/3] Requesting Expert Plan...
+  -> Result for torchvision: Reverted/Kept at 0.23.0 (No Change).
+::endgroup::
+
+Pass complete with changes.
+
+######################################################################
+### OVERALL UPDATE RUN SUMMARY ###
+
+[SUCCESS] The following packages were successfully updated:
+Package                        | Old Version          | New Version         
+------------------------------ | -------------------- | --------------------
+numpy                          | 1.26.4               | 2.0.2               
+Pillow                         | 8.0.0                | 9.5.0               
+scipy                          | 1.5.4                | 1.13.1              
+torchvision                    | 0.9.0                | 0.23.0              
+torch                          | 1.8.0                | 2.8.0               
+######################################################################
+
+
+Run complete. The final requirements.txt is the latest provably working version.
